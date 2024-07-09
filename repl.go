@@ -1,10 +1,11 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"os"
+	"log"
 	"strings"
+
+	"github.com/chzyer/readline"
 )
 
 type cliCommand struct {
@@ -14,14 +15,29 @@ type cliCommand struct {
 }
 
 func startRepl(c *config) {
-	scanner := bufio.NewScanner(os.Stdin)
+	// scanner := bufio.NewScanner(os.Stdin)
+	config := &readline.Config{
+		Prompt:            "Pokedex > ",
+		HistoryFile:       "/home/saumyagupta/my_pokedex/history.tmp", // Temporary file to store history
+		InterruptPrompt:   "^C",
+		EOFPrompt:         "exit",
+		HistorySearchFold: true,
+	}
 
+	rl, err := readline.NewEx(config)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rl.Close()
 	for {
-		fmt.Print("Pokedex > ")
-		scanner.Scan()
-		text := scanner.Text()
-
-		words := cleanInput(text)
+		// fmt.Print("Pokedex > ")
+		// scanner.Scan()
+		// text := scanner.Text()
+		line, err := rl.Readline()
+		if err != nil { // Handle errors such as Ctrl+C or EOF
+			log.Fatal(err)
+		}
+		words := cleanInput(line)
 		if len(words) == 0 {
 			continue
 		}
