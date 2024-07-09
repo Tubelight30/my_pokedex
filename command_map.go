@@ -7,7 +7,7 @@ import (
 	"github.com/Tubelight30/my_pokedex/internal/pokeapi"
 )
 
-func commandMap(c *config) error {
+func commandMap(c *config, args ...string) error {
 
 	resp, err := pokeapi.ListLocationAreas(c.nextLocationAreaURL)
 	if err != nil {
@@ -23,7 +23,7 @@ func commandMap(c *config) error {
 	return nil
 }
 
-func commandMapb(c *config) error {
+func commandMapb(c *config, args ...string) error {
 	if c.prevLocationAreaURL == nil {
 		return errors.New("you are on the first page")
 	}
